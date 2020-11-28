@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetLastestTrackerList</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <h1 id="title"  >Get Btracker Quickly - Now The Tracker List is Calculating </h1>
+        <p>
+        ------The Tracker List Auto Collect From Project below:------<br/>
+        https://github.com/DeSireFire/animeTrackerList<br/>
+        https://github.com/XIU2/TrackersListCollection<br/>
+        https://github.com/ngosang/trackerslist<br/>
+        </p>
+        <button id="copy" data-clipboard-target="#list">
+            Copy List
+        </button>
+        <button id="aria2">
+            Change to aria2
+        </button>
+        <br/>
+        <br/>
+    </div>
+
+    <div id="list" style="word-break : break-all;"> Tracker List is Calculating - Please Wait ~ </div>
+    <script>
+        $(document).ready(function () {
+            var clipboard = new ClipboardJS('#copy');
+            listA = $.ajax({ url: "https://trackerslist.com/all.txt", async: false });
+            listB = $.ajax({ url: "https://ngosang.github.io/trackerslist/trackers_all.txt", async: false });
+            listC = $.ajax({ url: "https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all.txt", async: false });
+
+
+            listA = listA.responseText.replace(/http/g,"<br/>http").replace(/udp/g,"<br/>udp").replace("<br/>","").replace(/\n/g,"***");
+            listB = listB.responseText.replace(/http/g,"<br/>http").replace(/udp/g,"<br/>udp").replace(/\n/g,"***");
+            listC = listC.responseText.replace(/http/g,"<br/>http").replace(/udp/g,"<br/>udp").replace(/\n/g,"***");
+            listA += listB + listC;
+            var arr = listA.split("***");
+            for (let i=0, len=arr.length; i<len; i++) {
+                for (let j=i+1; j<len; j++) {
+                    if (arr[i] == arr[j]) {
+                        arr.splice(j, 1);
+                        // splice 会改变数组长度，所以要将数组长度 len 和下标 j 减一
+                        len--;
+                        j--;
+                    }
+                }
+            }
+            $("#list").html(arr);
+            $("#title").html("Tracker List is Calculating - Done & Length is " + arr.length);
+
+            $("#aria2").click(function(){
+                //.replace(/\*\*\*\*\*\*/g,",").replace(/\*\*\*/g,",")
+                $("#list").html(arr.toString().replace(/<br\/>/g, ""));
+            });
+
+            //$("#list").html(listA.responseText.replace(/http/g,"<br/>http").replace(/udp/g,"<br/>udp").replace("<br/>","").replace(/\n/g,""));
+            //$("#list").append(listB.responseText.replace(/http/g,"<br/>http").replace(/udp/g,"<br/>udp").replace(/\n/g,""));
+            //$("#list").append(listC.responseText.replace(/http/g,"<br/>http").replace(/udp/g,"<br/>udp").replace(/\n/g,""));
+        });
+    </script>
+</body>
+</html>
+
+<!--
+https://github.com/DeSireFire/animeTrackerList
+https://github.com/XIU2/TrackersListCollection
+https://github.com/ngosang/trackerslist
+-->
