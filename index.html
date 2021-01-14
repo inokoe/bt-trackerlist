@@ -35,9 +35,9 @@
             listA = $.ajax({ url: "https://trackerslist.com/all.txt", async: false });
             listB = $.ajax({ url: "https://ngosang.github.io/trackerslist/trackers_all.txt", async: false });
             listC = $.ajax({ url: "https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all.txt", async: false });
-            listA = listA.responseText.replace(/\n\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp").replace("<br/>", "");
-            listB = listB.responseText.replace(/\n\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp");
-            listC = listC.responseText.replace(/\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp");
+            listA = listA.responseText.replace(/\n\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp").replace(/wss:\/\//g, "<br/>wss://").replace("<br/>", "").replace(/ws:\/\//g, "<br/>ws://");
+            listB = listB.responseText.replace(/\n\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp").replace(/wss:\/\//g, "<br/>wss://").replace(/ws:\/\//g, "<br/>ws://");
+            listC = listC.responseText.replace(/\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp").replace(/wss:\/\//g, "<br/>wss://").replace(/ws:\/\//g, "<br/>ws://");
             listA += listB + listC;
             var arr = listA.split("*|*|*");
             for (let i = 0, len = arr.length; i < len; i++) {
