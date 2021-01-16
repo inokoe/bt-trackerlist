@@ -4,64 +4,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GetLastestTrackerList</title>
+    <title>GetLastestTrackerLists</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css"
+        integrity="sha512-ZRv40llEogRmoWgZwnsqke3HNzJ0kiI0+pcMgiz2bxO6Ew1DVBtWjVn0qjrXdT3+u+pSN36gLgmJiiQ3cQtyzA=="
+        crossorigin="anonymous" />
 </head>
 
 <body>
-    <div>
-        <h1 id="title">Get Btracker Quickly - Now The Tracker List is Calculating </h1>
-        <p>
-            ------The Tracker List Auto Collect From Project below:------<br />
+    <section class="hero is-warning">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    The BT Tracker List Combine
+                </h1>
+                <h2 class="subtitle" id="update">
+                    Now The Tracker List is Calculating...
+                </h2>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <p class="subtitle">
+                <strong>The Tracker List Auto Collect From Project below:</strong>
+            </p>
             https://github.com/DeSireFire/animeTrackerList<br />
             https://github.com/XIU2/TrackersListCollection<br />
             https://github.com/ngosang/trackerslist<br />
-        </p>
-        <button id="copy" data-clipboard-target="#list">
-            Copy List
-        </button>
-        <button id="aria2">
-            Change to aria2
-        </button>
-        <br />
-        <br />
-    </div>
+            <hr />
+            <textarea id="list" value="45634" class="textarea"
+                placeholder=" Tracker List is Calculating - Please Wait ~ "></textarea>
+            <br />
+            <button class="button is-danger" id="copy" data-clipboard-target="#list">
+                Copy List
+            </button>
+            <button class="button is-danger" id="aria2">
+                Copy List(aria2)
+            </button>
+        </div>
+    </section>
 
-    <div id="list" style="word-break : break-all;"> Tracker List is Calculating - Please Wait ~ </div>
+
     <script>
         $(document).ready(function () {
             var clipboard = new ClipboardJS('#copy');
-            listA = $.ajax({ url: "https://trackerslist.com/all.txt", async: false });
-            listB = $.ajax({ url: "https://ngosang.github.io/trackerslist/trackers_all.txt", async: false });
-            listC = $.ajax({ url: "https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all.txt", async: false });
-            listA = listA.responseText.replace(/\n\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp").replace(/wss:\/\//g, "<br/>wss://").replace("<br/>", "").replace(/ws:\/\//g, "<br/>ws://");
-            listB = listB.responseText.replace(/\n\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp").replace(/wss:\/\//g, "<br/>wss://").replace(/ws:\/\//g, "<br/>ws://");
-            listC = listC.responseText.replace(/\n/g, "*|*|*").replace(/http/g, "<br/>http").replace(/udp/g, "<br/>udp").replace(/wss:\/\//g, "<br/>wss://").replace(/ws:\/\//g, "<br/>ws://");
+            listA = $.ajax({ url: "https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all.txt", async: false });
+            listB = $.ajax({ url: "https://trackerslist.com/all.txt", async: false });
+            listC = $.ajax({ url: "https://ngosang.github.io/trackerslist/trackers_all.txt", async: false });
+            listA = listA.responseText.replace(/[\r\n]/g, "");
+            listB = listB.responseText.replace(/[\r\n]/g, "");
+            listC = listC.responseText.replace(/[\r\n]/g, "");
             listA += listB + listC;
+            listA = listA.replace(/http/g, "*|*|*\r\nhttp").replace(/udp/g, "*|*|*\r\nudp").replace(/wss:\/\//g, "*|*|*\r\nwss://").replace(/ws:\/\//g, "*|*|*\r\nws://").replace("*|*|*\r\n", "");
             var arr = listA.split("*|*|*");
             for (let i = 0, len = arr.length; i < len; i++) {
                 for (let j = i + 1; j < len; j++) {
                     if (arr[i] == arr[j]) {
-                        arr.splice(j, 1);// 删除重复地址，splice 会改变数组长度，所以要将数组长度 len 和下标 j 减一
+                        arr.splice(j, 1);
                         len--;
                         j--;
                     }
                 }
             }
             $("#list").html(arr);
-            $("#title").html("Tracker List is Calculating - Done & Length is " + arr.length);
+            $("#update").html("Done & Length is " + arr.length);
             $("#aria2").click(function () {
-                $("#list").html(arr.toString().replace(/<br\/>/g, ""));
+                $("#list").html(arr.toString().replace(/[\r\n]/g, ""));
             });
         });
     </script>
 </body>
 
 </html>
-
-<!--
-https://github.com/DeSireFire/animeTrackerList
-https://github.com/XIU2/TrackersListCollection
-https://github.com/ngosang/trackerslist
--->
